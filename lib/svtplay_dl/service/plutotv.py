@@ -119,6 +119,7 @@ class Plutotv(Service, OpenGraphThumbMixin):
         janson_nn = json.loads(match.group(1))
 
         hashid = None
+        showid = None
         if "dehydratedState" not in janson_nn["props"]["pageProps"]:
             logging.error("Can't find any video info")
             return episodes
@@ -127,6 +128,7 @@ class Plutotv(Service, OpenGraphThumbMixin):
                 match = re.search(r"ptvm/series/([^\/]+)/featuredImage", queries["state"]["data"]["showHome"]["hero"]["standardImgForAllScreens"])
                 if match:
                     hashid = match.group(1)
+                showid = queries["state"]["data"]["showHome"]["show"]["id"]
 
         rul = f"https://service-vod.clusters.pluto.tv/v4/vod/series/{hashid}/seasons?offset=0&page=0"
 
@@ -134,7 +136,7 @@ class Plutotv(Service, OpenGraphThumbMixin):
         for season in res.json()["seasons"]:
             if "episodes" in season:
                 for episode in season["episodes"]:
-                    episodes.append(f"https://pluto.tv/{language}/shows/{self.slug}/episode/{episode['_id']}")
+                    episodes.append(f"https://pluto.tv/{language}/shows/{showid}/episode/{episode['_id']}")
 
         return episodes
 
