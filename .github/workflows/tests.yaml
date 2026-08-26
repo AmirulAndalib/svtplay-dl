@@ -74,7 +74,7 @@ jobs:
         run: |
           echo "Generating changelog for ${{ github.ref }}..."
           BEFORE="${{ github.event.before }}"
-          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
             BEFORE=$(git merge-base HEAD origin/master || echo "origin/master")
           fi
           git log --oneline ${BEFORE}..${{ github.sha }} > changelog.txt
