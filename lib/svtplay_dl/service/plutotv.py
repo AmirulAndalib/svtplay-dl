@@ -5,6 +5,7 @@ import uuid
 from urllib.parse import urlparse
 
 from svtplay_dl.error import ServiceError
+from svtplay_dl.fetcher.ffmpeg import FFMPEG
 from svtplay_dl.fetcher.hls import hlsparse
 from svtplay_dl.service import OpenGraphThumbMixin
 from svtplay_dl.service import Service
@@ -83,6 +84,7 @@ class Plutotv(Service, OpenGraphThumbMixin):
             self.output,
             filter=True,
             query_pass=True,
+            fetcher=FFMPEG,
         )
 
         for playlist in playlists:
