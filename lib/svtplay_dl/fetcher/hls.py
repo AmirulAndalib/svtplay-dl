@@ -51,6 +51,7 @@ def hlsparse(config, res, url, output, **kwargs):
 
 def _hlsparse(config, text, url, output, **kwargs):
     m3u8 = M3U8(text)
+    fetcher = kwargs.pop("fetcher", HLS)
     keycookie = kwargs.pop("keycookie", None)
     cookies = kwargs.pop("cookies", None)
     authorization = kwargs.pop("authorization", None)
@@ -153,7 +154,7 @@ def _hlsparse(config, text, url, output, **kwargs):
                                 query = urlsplit(url).query
                                 audio_url = f"{audio_url}?{query}" if query else audio_url
                                 vurl = f"{vurl}?{query}" if query else vurl
-                            yield HLS(
+                            yield fetcher(
                                 copy.copy(config),
                                 vurl,
                                 bit_rate,
@@ -183,7 +184,7 @@ def _hlsparse(config, text, url, output, **kwargs):
                             query = urlsplit(url).query
                             audio_url = f"{audio_url}?{query}" if query else audio_url
                             vurl = f"{vurl}?{query}" if query else vurl
-                        yield HLS(
+                        yield fetcher(
                             copy.copy(config),
                             vurl,
                             bit_rate,
@@ -208,7 +209,7 @@ def _hlsparse(config, text, url, output, **kwargs):
                     query = urlsplit(url).query
                     audio_url = f"{audio_url}?{query}" if query else audio_url
                     vurl = f"{vurl}?{query}" if query else vurl
-                yield HLS(
+                yield fetcher(
                     copy.copy(config),
                     urls,
                     bit_rate,
@@ -243,7 +244,7 @@ def _hlsparse(config, text, url, output, **kwargs):
 
     elif m3u8.media_segment:
         config.set("segments", False)
-        yield HLS(
+        yield fetcher(
             copy.copy(config),
             url,
             0,
