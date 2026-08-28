@@ -124,7 +124,7 @@ class Plutotv(Service, OpenGraphThumbMixin):
             logging.error("Can't find any video info")
             return episodes
         for queries in janson_nn["props"]["pageProps"]["dehydratedState"]["queries"]:
-            if "state" in queries and "data" in queries["state"] and "showHome" in queries["state"]["data"]:
+            if "state" in queries and "data" in queries["state"] and queries["state"]["data"] and "showHome" in queries["state"]["data"]:
                 match = re.search(r"ptvm/series/([^\/]+)/featuredImage", queries["state"]["data"]["showHome"]["hero"]["standardImgForAllScreens"])
                 if match:
                     hashid = match.group(1)
